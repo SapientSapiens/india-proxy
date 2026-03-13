@@ -1,15 +1,32 @@
 from http.server import BaseHTTPRequestHandler
 import json
 import urllib.request
+import os
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
-        # Read the incoming request body
+        # 1. Check API key header
+        expected_key = os.environ.get('RAG_API_KEY')
+        if not expected_key:
+            self.send_response(500)
+            self.end_headers()
+            self.wfile.write(b'{"error": "Server misconfigured: no RAG_API_KEY set"}')
+            return
+
+        # Get the API key from the request header
+        provided_key = self.headers.get('X-API-Key')
+        if provided_key != expected_key:
+            self.send_response(401)
+            self.end_headers()
+            self.wfile.write(b'{"error": "Unauthorized:Get Your RAG API Dude!!"}')
+            return
+
+        # 2. Read the incoming request body
         content_length = int(self.headers.get('Content-Length', 0))
         post_data = self.rfile.read(content_length)
         request_json = json.loads(post_data)
 
-        # Forward to your internal API
+        # 3. Forward to your internal API
         internal_url = 'http://157.20.175.68:8001/query'
         req = urllib.request.Request(
             internal_url,
