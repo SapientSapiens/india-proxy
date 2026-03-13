@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/proxy.py": {
+      "regions": ["bom1"]
+    }
+  }
+}
