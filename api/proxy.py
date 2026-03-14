@@ -27,7 +27,8 @@ class handler(BaseHTTPRequestHandler):
         request_json = json.loads(post_data)
 
         # 3. Forward to your internal API
-        internal_url = 'http://157.20.175.68:8001/query'
+       
+        internal_url = os.environ.get('INTERNAL_URL')
         req = urllib.request.Request(
             internal_url,
             data=json.dumps(request_json).encode('utf-8'),
