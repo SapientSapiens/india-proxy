@@ -67,7 +67,7 @@ class handler(BaseHTTPRequestHandler):
         )
 
         try:
-            with urllib.request.urlopen(req, timeout=30) as response:
+            with urllib.request.urlopen(req, timeout=60) as response:
                 response_data = response.read()
 
                 # Capture session id returned by backend
